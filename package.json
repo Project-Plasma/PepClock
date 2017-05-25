@@ -54,5 +54,8 @@
     "plugins": [
       "transform-es2015-modules-commonjs"
     ]
+  },
+  "engines": {
+    "node": "7.10.0"
   }
 }
