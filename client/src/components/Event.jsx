@@ -1,6 +1,11 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
+=======
+import Contributions from 'Contributions.jsx'
+>>>>>>> Add tests for Contributions component
 import axios from 'axios';
+
 
 class Event extends React.Component {
   constructor(props) {
