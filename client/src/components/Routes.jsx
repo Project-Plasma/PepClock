@@ -10,7 +10,7 @@ import {
 
 import Home from './Home';
 import Dashboard from './Dashboard';
-import Events from './Events';
+import Event from './Event';
 import Create from './Create';
 
 class Routes extends React.Component {
@@ -25,7 +25,7 @@ class Routes extends React.Component {
           <NavLink to="/dashboard">PepClock</NavLink>
           <Route exact path="/" component={Home} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/events/:id" component={Events} />
+          <Route path="/event/:id" component={Event} />
           <Route path="/create" component={Create} />
         </div>
       </Router>
