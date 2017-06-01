@@ -1,6 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 
-class Contribution extends React.Component{
+class ContributionListItem extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
@@ -35,4 +36,4 @@ class Contribution extends React.Component{
   }
 }
 
-export default Contribution;
+export default ContributionListItem;

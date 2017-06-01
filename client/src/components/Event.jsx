@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Contributions from './Contributions'
+import ContributionList from './ContributionList'
 import axios from 'axios';
 
 

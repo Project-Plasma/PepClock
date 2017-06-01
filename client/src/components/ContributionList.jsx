@@ -1,7 +1,8 @@
 import React from 'react';
-// import Contribution from './Contribution.jsx';
+import ContributionListItem from './ContributionListItem';
+import axios from 'axios';
 
-class Contributions extends React.Component {
+class ContributionList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -43,7 +44,7 @@ class Contributions extends React.Component {
 
   render() {
     return (
-      <div className="contributions">
+      <div className="contribution-list">
         <div className="title">
           <h1> Event title is {this.state.title}</h1>
         </div>
@@ -63,4 +64,4 @@ class Contributions extends React.Component {
   }
 }
 
-export default Contributions;
+export default ContributionList;
