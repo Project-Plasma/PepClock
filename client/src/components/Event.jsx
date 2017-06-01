@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ContributionList from './ContributionList'
 import axios from 'axios';
+
 
 class Event extends React.Component {
   constructor(props) {
