@@ -1,9 +1,6 @@
 import React from 'react';
-<<<<<<< HEAD
 import { Link } from 'react-router-dom';
-=======
-import Contributions from 'Contributions.jsx'
->>>>>>> Add tests for Contributions component
+import Contributions from './Contributions'
 import axios from 'axios';
 
 
