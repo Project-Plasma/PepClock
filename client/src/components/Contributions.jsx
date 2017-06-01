@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Contribution from './Contribution.jsx';
 
 class Contributions extends React.Component {
   constructor(props) {
@@ -8,9 +8,26 @@ class Contributions extends React.Component {
       title: '',
       contributions: []
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   };
 
-  
+  handleChange(event) {
+    var newState = {};
+    newState[event.target.name] = event.target.value;
+    this.setState(newState);
+  }
+
+  handleClick(event) {
+    this.setState({contributions: this.state.contributions.concat([this.state.contribution])});
+    this.setState({contribution: ''});
+  }
+
+  handleKeyPress(target) {
+    if (target.charCode === 13) { 
+      this.handleClick();
+    }
+  }
 
   render(){
     return (
@@ -21,12 +38,12 @@ class Contributions extends React.Component {
         <hr />
         <div className="user-contributions">
           <ul>
-            {this.state.contributions.map(contribution => <li style="none">{contribution}</li>)}
+            {/*{this.state.contributions.map(contribution => <li style="none">{contribution}</li>)}*/}
             <li>Hello from the list</li>
           </ul>
         </div>
         <form className="comment">
-          <input type="textarea" placeholder="Add a Comment" autoFocus="true" onChange={this.handleChange} />
+          <input type="textarea" placeholder="Add a Comment" autoFocus="true" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
           <button id="submit" onClick={this.handleClick}>Comment</button>
         </form>
       </div>
