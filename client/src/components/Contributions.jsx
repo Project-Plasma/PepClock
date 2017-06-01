@@ -12,6 +12,18 @@ class Contributions extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   };
 
+  //TODO: Use later when backend is ready
+  // componentDidMount () {
+  //   const eventId = this.props.match.params.id;
+  //   axios.get(`/api/events/${eventId}`)
+  //   .then(data =>{
+  //     this.setState({
+  //       title: data.title,
+  //       contributions: data.contributions
+  //     });
+  //   });
+  // }
+
   handleChange(event) {
     var newState = {};
     newState[event.target.name] = event.target.value;
