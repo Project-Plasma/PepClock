@@ -1,5 +1,5 @@
 import React from 'react';
-import Contribution from './Contribution.jsx';
+// import Contribution from './Contribution.jsx';
 
 class Contributions extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class Contributions extends React.Component {
     }
   }
 
-  render(){
+  render() {
     return (
       <div className="contributions">
         <div className="title">
