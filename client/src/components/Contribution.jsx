@@ -4,7 +4,8 @@ class Contribution extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-      eventId: ''
+      text: '',
+      contributorId: ''
     }
   };
 
@@ -14,7 +15,8 @@ class Contribution extends React.Component{
   //   axios.get(`/api/events/${eventId}`)
   //   .then(data =>{
   //     this.setState({
-  //       eventId: data.eventId
+  //       text: data.text,
+  //       contributorId: data.contributorId
   //     });
   //   });
   // }
