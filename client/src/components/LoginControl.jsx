@@ -1,5 +1,4 @@
 import React from 'react';
-import userName from './UserNameDisplay';
 import CountdownTimer from './CountdownTimer';
 
 const LoginControl = () => {
