@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ContributionList from './ContributionList';
 import axios from 'axios';
 import moment from 'moment';
-import CountdownTimer from './CountdownTimer';
+import TimeUntil from './TimeUntil';
 
 
 class Event extends React.Component {
@@ -14,7 +14,10 @@ class Event extends React.Component {
       title: '',
       contributionList: [],
       contributionText: '',
-      delivery_time: ''
+      delivery_time: '',
+      curSecond: '',
+      curMinute: '',
+      curHour: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,6 +48,19 @@ class Event extends React.Component {
     });
   }
 
+  setDate() {
+    const now = moment();
+    const seconds = moment().second();
+    const minutes = moment().minute();
+    const hours = moment().hour();
+
+    this.setState({
+      curSecond: seconds,
+      curMinute: minutes,
+      curHour: hours
+    });
+  }
+
   componentDidMount () {
     axios.get(`/api/events/${this.state.eventId}`)
     .then(result => {
@@ -56,7 +72,10 @@ class Event extends React.Component {
     })
     .catch(error => {
       console.log('Error in Event data query', error);
-    });
+    })
+    .then(
+      setInterval(this.setDate.bind(this), 1000)
+    );
   }
 
   updateContributions() {
@@ -75,25 +94,20 @@ class Event extends React.Component {
     const { title, description, delivery_time } = this.state;
 
     let LaunchTimeLen = moment(delivery_time).length;
-
-    console.log(LaunchTimeLen);
     let launchTime = moment(this.state.delivery_time).format('YYYY MM DD hh mm ss');
-    let launchTimeDisplay = moment(this.state.delivery_time).format('YYYY MMM Do | hh : mm');
+    let launchTimeDisplay = moment(this.state.delivery_time).format('MMM Do YYYY || hh : mm');
     let timeOfDay = moment(this.state.delivery_time).format('H') > 12 ? 'PM' : 'AM';
     let launchDisplay = launchTimeDisplay + '' + timeOfDay;
     let rightNow = moment();
-    
     let timeToLaunch = rightNow.to(this.state.delivery_time);
-
     let happen = timeToLaunch.includes('ago') ? 'happened' : 'happening';
-    let at = timeToLaunch.includes('ago') ? 'at' : 'on';
 
     return (
       <div className="event">
         <div className="title">
           <h1>{title}</h1>
           <h3>{happen} {timeToLaunch}</h3>
-          <h5>{at} {launchDisplay}</h5>
+          <h5>on {launchDisplay}</h5>
         </div>
           <Link to={`/edit/${id}`}>Edit event</Link>
         <hr />
