@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ContributionList from './ContributionList';
 import axios from 'axios';
+import moment from 'moment';
 import CountdownTimer from './CountdownTimer';
 
 
@@ -73,11 +74,26 @@ class Event extends React.Component {
     const { id } = this.props.match.params;
     const { title, description, delivery_time } = this.state;
 
+    let LaunchTimeLen = moment(delivery_time).length;
+
+    console.log(LaunchTimeLen);
+    let launchTime = moment(this.state.delivery_time).format('YYYY MM DD hh mm ss');
+    let launchTimeDisplay = moment(this.state.delivery_time).format('YYYY MMM Do | hh : mm');
+    let timeOfDay = moment(this.state.delivery_time).format('H') > 12 ? 'PM' : 'AM';
+    let launchDisplay = launchTimeDisplay + '' + timeOfDay;
+    let rightNow = moment();
+    
+    let timeToLaunch = rightNow.to(this.state.delivery_time);
+
+    let happen = timeToLaunch.includes('ago') ? 'happened' : 'happening';
+    let at = timeToLaunch.includes('ago') ? 'at' : 'on';
+
     return (
       <div className="event">
         <div className="title">
           <h1>{title}</h1>
-          <h3>{delivery_time}</h3>
+          <h3>{happen} {timeToLaunch}</h3>
+          <h5>{at} {launchDisplay}</h5>
         </div>
           <Link to={`/edit/${id}`}>Edit event</Link>
         <hr />
