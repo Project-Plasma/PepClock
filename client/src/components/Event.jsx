@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ContributionList from './ContributionList';
 import axios from 'axios';
+import CountdownTimer from './CountdownTimer';
 
 
 class Event extends React.Component {
@@ -11,7 +12,8 @@ class Event extends React.Component {
       eventId: props.match.params.id,
       title: '',
       contributionList: [],
-      contributionText: ''
+      contributionText: '',
+      delivery_time: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,7 +48,8 @@ class Event extends React.Component {
     axios.get(`/api/events/${this.state.eventId}`)
     .then(result => {
       this.setState({
-        title: result.data.title
+        title: result.data.title,
+        delivery_time: result.data.delivery_time
       });
       this.updateContributions();
     })
@@ -68,12 +71,13 @@ class Event extends React.Component {
 
   render() {
     const { id } = this.props.match.params;
-    const { title, description } = this.state;
+    const { title, description, delivery_time } = this.state;
 
     return (
       <div className="event">
         <div className="title">
           <h1>{title}</h1>
+          <h3>{delivery_time}</h3>
         </div>
           <Link to={`/edit/${id}`}>Edit event</Link>
         <hr />
