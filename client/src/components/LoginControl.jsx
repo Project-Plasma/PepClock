@@ -1,4 +1,6 @@
 import React from 'react';
+import userName from './UserNameDisplay';
+import CountdownTimer from './CountdownTimer';
 
 const LoginControl = () => {
   const user = window.user;
@@ -6,6 +8,7 @@ const LoginControl = () => {
   if (user){
     return (
         <ul className="nav navbar-nav navbar-right">
+          <CountdownTimer />
           <li>
             <a href="/logout">Logout</a>
           </li>
