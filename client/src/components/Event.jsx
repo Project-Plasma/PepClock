@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ContributionList from './ContributionList';
 import axios from 'axios';
-import moment from 'moment';
-import TimeUntil from './TimeUntil';
 
 
 class Event extends React.Component {
@@ -14,14 +12,15 @@ class Event extends React.Component {
       title: '',
       contributionList: [],
       contributionText: '',
-      delivery_time: '',
-      curSecond: '',
-      curMinute: '',
-      curHour: ''
+      hasPermissionToView: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateContributions = this.updateContributions.bind(this);
+  }
+
+  componentWillMount () {
+    this.checkIfContributor();
   }
 
   handleChange(event) {
@@ -29,7 +28,6 @@ class Event extends React.Component {
   }
 
   handleSubmit(event) {
-    var that = this;
     event.preventDefault();
     axios({
       method: 'post',
@@ -39,90 +37,84 @@ class Event extends React.Component {
         contributionText: this.state.contributionText,
       }
     })
-    .then(function(res) {
-      that.setState({contributionText: ''});
-      that.updateContributions();
+    .then(res => {
+      this.setState({contributionText: ''});
+      this.updateContributions();
     })
-    .catch(function(err) {
+    .catch(err => {
       console.log('Error in Event.jsx', err);
     });
   }
 
-  setDate() {
-    const now = moment();
-    const seconds = moment().second();
-    const minutes = moment().minute();
-    const hours = moment().hour();
-
-    this.setState({
-      curSecond: seconds,
-      curMinute: minutes,
-      curHour: hours
-    });
-  }
-
-  componentDidMount () {
-    axios.get(`/api/events/${this.state.eventId}`)
-    .then(result => {
-      this.setState({
-        title: result.data.title,
-        delivery_time: result.data.delivery_time
-      });
-      this.updateContributions();
-    })
-    .catch(error => {
-      console.log('Error in Event data query', error);
-    })
-    .then(
-      setInterval(this.setDate.bind(this), 1000)
-    );
+  checkIfContributor () {
+    axios.get('/api/events/user')
+      .then(({ data: events }) => {
+        const userEventIds = events.map(event => event.event_id);
+        this.setState({
+          hasPermissionToView: userEventIds.includes(Number(this.state.eventId))
+        });
+        this.getEventContent();
+      })
+      .catch(error => {});
   }
 
   updateContributions() {
-
     axios.get(`/api/contributions/events/${this.state.eventId}`)
-      .then(result => {
-        this.setState({contributionList: result.data});
+      .then(({ data: contributionList}) => {
+        this.setState({contributionList});
       })
       .catch(error => {
         console.log('Error in updateContributions query', error);
       });
   }
 
-  render() {
-    const { id } = this.props.match.params;
-    const { title, description, delivery_time } = this.state;
+  getEventContent () {
+    axios.get(`/api/events/${this.state.eventId}`)
+    .then(({ data: { title } }) => {
+      this.setState({ title });
+      this.updateContributions();
+    })
+    .catch(error => {
+      console.log('Error in Event data query', error);
+    });
+  }
 
-    let LaunchTimeLen = moment(delivery_time).length;
-    let launchTime = moment(this.state.delivery_time).format('YYYY MM DD hh mm ss');
-    let launchTimeDisplay = moment(this.state.delivery_time).format('MMM Do YYYY || hh : mm');
-    let timeOfDay = moment(this.state.delivery_time).format('H') > 12 ? 'PM' : 'AM';
-    let launchDisplay = launchTimeDisplay + '' + timeOfDay;
-    let rightNow = moment();
-    let timeToLaunch = rightNow.to(this.state.delivery_time);
-    let happen = timeToLaunch.includes('ago') ? 'happened' : 'happening';
+  render() {
+    // This condition prevents the "non-permitted" state
+    // from rendering for a flash before rending content.
+    if (this.state.hasPermissionToView === null) {
+      return <div></div>;
+    }
+
+    if (this.state.hasPermissionToView) {
+      const { id } = this.props.match.params;
+      const { title, description } = this.state;
+
+      return (
+        <div className="event">
+          <h1>{title}</h1>
+          <Link to={`/edit/${id}`}>Edit event</Link>
+          <hr />
+          <ContributionList contributionList={this.state.contributionList}/>
+          <hr />
+          <form className="add" onSubmit={this.handleSubmit}>
+            <input
+              type="textarea"
+              placeholder="Enter Contribution Text"
+              autoFocus="true"
+              onChange={this.handleChange}
+              value={this.state.contributionText}
+            />
+            <button id="submit">Submit</button>
+          </form>
+        </div>
+      );
+    }
 
     return (
       <div className="event">
-        <div className="title">
-          <h1>{title}</h1>
-          <h3>{happen} {timeToLaunch}</h3>
-          <h5>on {launchDisplay}</h5>
-        </div>
-          <Link to={`/edit/${id}`}>Edit event</Link>
-        <hr />
-        <ContributionList contributionList={this.state.contributionList}/>
-        <hr />
-        <form className="add" onSubmit={this.handleSubmit}>
-          <input
-            type="textarea"
-            placeholder="Enter Contribution Text"
-            autoFocus="true"
-            onChange={this.handleChange}
-            value={this.state.contributionText}
-          />
-          <button id="submit">Submit</button>
-        </form>
+        <h3>Sorry, this doesn't seem to be one of your events</h3>
+        <p>Perhaps you'd like to <Link to="/dashboard">view your events</Link></p>
       </div>
     );
   }
