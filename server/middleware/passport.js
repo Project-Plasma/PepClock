@@ -3,6 +3,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
+const TotpStrategy = require('passport-totp').Strategy;
+const base32 = require('thirty-two');
+const sprintfjs = require('sprintf-js');
+const crypto = require('crypto');
 const models = require('../../db/models');
 
 passport.serializeUser((profile, done) => {
@@ -67,7 +71,8 @@ passport.use('local-signup', new LocalStrategy({
       .catch(() => {
         done(null, false, req.flash('signupMessage', 'An account with this email address already exists.'));
       });
-  }));
+  })
+);
 
 passport.use('local-login', new LocalStrategy({
   usernameField: 'email',
@@ -75,12 +80,14 @@ passport.use('local-login', new LocalStrategy({
   passReqToCallback: true
 },
   (req, email, password, done) => {
+
     // fetch any profiles that have a local auth account with this email address
     return models.Profile.where({ email }).fetch({
       withRelated: [{
         auths: query => query.where({ type: 'local' })
       }]
     })
+
       .then(profile => {
         // if there is no profile with that email or if there is no local auth account with profile
         if (!profile || !profile.related('auths').at(0)) {
@@ -107,7 +114,23 @@ passport.use('local-login', new LocalStrategy({
       .catch(() => {
         done(null, null, req.flash('loginMessage', 'Incorrect username or password'));
       });
-  }));
+  })
+);
+
+passport.use('twofa', new TotpStrategy({
+  usernameField: 'email',
+  password: 'password',
+  passReqToCallback: true
+},
+  (user, done) => {
+    let key = user.key;
+    if (!key) {
+      return done(new Error('no key on the user'));
+    } else {
+      return done(new Error('successfully redirected using TOTP-Strategy'))
+    }
+  }
+));
 
 passport.use('google', new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
