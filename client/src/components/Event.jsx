@@ -114,10 +114,10 @@ class Event extends React.Component {
 
     if (this.state.hasPermissionToView) {
       const { id } = this.props.match.params;
-      const { title, description, delivery_time } = this.state;
+      const { title, description, delivery_time, recipient } = this.state;
 
       let launchTimeDisplay = moment(delivery_time).format('MMM Do YYYY || hh : mm');
-      let timeOfDay = moment(delivery_time).format('H') > 12 ? 'PM' : 'AM';
+      let timeOfDay = moment(delivery_time).format('a');
       let launchDisplay = launchTimeDisplay + ' ' + timeOfDay;
       let timeToLaunch = moment().to(delivery_time);
       let happen = timeToLaunch.includes('ago') ? 'Happened' : 'Happening';
