@@ -10,12 +10,12 @@ class ContributionListItem extends React.Component {
 
   render () {
     return (
-      <div className="card w-50 mx-auto mb-3">
+      <div className="card col-md-10 offset-md-1 mb-3">
         {renderIf(this.props.contribution.type === 'image')(
-          <img className="card-img-top img-fluid" src={this.props.contribution.media_url} />
+          <img className="card-img-top img-fluid mt-3" src={this.props.contribution.media_url} />
         )}
         {renderIf(this.props.contribution.type === 'video')(
-          <video controls className="card-img-top img-fluid" src={this.props.contribution.media_url} />
+          <video controls className="card-img-top img-fluid mt-3" src={this.props.contribution.media_url} />
         )}
         <div className="card-block">
           <p className="card-text">{this.props.contribution.text}</p>

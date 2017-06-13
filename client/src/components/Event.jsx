@@ -125,8 +125,8 @@ class Event extends React.Component {
       return (
         <div className="event">
           <div className="row">
-            <div className="col-xs-12">
-              <h1 className="display-2">{title}</h1>
+            <div className="col-md-12">
+              <h1>{title}</h1>
               <h4>A PepClock Lovingly Created for {this.state.recipient.first_name} {this.state.recipient.last_name}</h4>
               <h5 className="text-muted">{happen} {timeToLaunch}</h5>
               <h6 className="text-muted">on {launchDisplay}</h6>

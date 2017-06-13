@@ -9,7 +9,7 @@ class ContributionList extends React.Component {
   render() {
     if (this.props.contributionList.length) {
       return (
-        <div className="bg-faded w-75 mx-auto pt-3 pb-2">
+        <div className="bg-faded col-md-12">
           {this.props.contributionList.map((contribution) =>
             <ContributionListItem contribution={contribution} key={contribution.id}/>)}
         </div>
