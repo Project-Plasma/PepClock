@@ -35,6 +35,7 @@
     "express-session": "^1.15.1",
     "filestack-js": "^0.6.3",
     "grunt-pg": "https://github.com/watsoncj/grunt-pg.git",
+    "heroku-ssl-redirect": "^0.0.4",
     "knex": "^0.12.9",
     "lodash": "^4.17.4",
     "morgan": "^1.8.1",
