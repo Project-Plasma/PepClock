@@ -15,7 +15,7 @@ const Home = () => {
           <Splash />
         </div>
 
-        <div className="row justify-content-around">
+        <div className="row justify-content-around" style={{ margin: '3em'}}>
           <Signup />
           <Login /> 
         </div>
