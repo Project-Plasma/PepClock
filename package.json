@@ -79,7 +79,7 @@
     "react-test-renderer": "^15.5.4",
     "supertest": "^3.0.0",
     "webpack": "^2.3.2",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": ">=3.1.11"
   },
   "babel": {
     "plugins": [
